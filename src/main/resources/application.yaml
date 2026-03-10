@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: kitchen
+  cloud:
+    config:
+      feature-flag:
+        # default initial-timeout is 5 seconds.
+        initial-timeout: 5s
+        # default poll-interval is 5 minutes.
+        poll-interval: 5m
