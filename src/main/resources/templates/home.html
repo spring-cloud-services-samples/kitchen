@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home – Kitchen</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+</head>
+<body th:classappend="${'theme-' + theme}" class="page-home">
+<div th:if="${discountPercent > 0}"
+     class="discount-banner"
+     th:style="|--discount-tier: ${discountPercent};|"
+     role="status">
+    <span class="discount-banner__body">You’ve unlocked <strong th:text="|${discountPercent}% off|">5% off</strong> on today’s order — enjoy your meal for a little less.</span>
+</div>
+<div class="container">
+    <header>
+        <h1>Today's dishes!</h1>
+        <div>
+            <span class="user" th:text="${userEmail}">guest@example.com</span>
+            <span> · </span>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+    </header>
+    <ul>
+        <li th:each="dish : ${dishes}">
+            <strong th:text="${dish.name}">Dish name</strong>
+            <span th:text="${dish.description}">Description</span>
+        </li>
+    </ul>
+    <th:block th:unless="${#lists.isEmpty(betaDishes)}">
+        <section class="special-section">
+            <h2>New dishes, give them a try!</h2>
+            <ul>
+                <li th:each="dish : ${betaDishes}">
+                    <strong th:text="${dish.name}">Beta dish</strong>
+                    <span th:text="${dish.description}">Description</span>
+                </li>
+            </ul>
+        </section>
+    </th:block>
+</div>
+</body>
+</html>
