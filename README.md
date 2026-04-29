@@ -4,6 +4,62 @@
 Application Service. (For information on the Config Server product in Tanzu Application Service, please see
 the [documentation](https://techdocs.broadcom.com/tnz-app-services).)
 
+## Building the Application
+
+This project supports both Gradle and Maven build systems.
+
+### Gradle Build (Default)
+
+```bash
+./gradlew build
+./gradlew bootRun
+```
+
+### Maven Build (Alternative)
+
+This project uses Spring Enterprise artifacts from Broadcom's repository, which requires authentication.
+
+#### Authentication Setup
+
+**Option 1: Environment Variables**
+```bash
+export SEC_ARTIFACTORY_USERNAME=your_username
+export SEC_ARTIFACTORY_PASSWORD=your_password
+```
+
+**Option 2: Maven Settings**
+Add the following to your `~/.m2/settings.xml` file:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 
+                              http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <servers>
+        <server>
+            <id>spring-enterprise</id>
+            <username>${env.SEC_ARTIFACTORY_USERNAME}</username>
+            <password>${env.SEC_ARTIFACTORY_PASSWORD}</password>
+        </server>
+    </servers>
+</settings>
+```
+
+#### Building with Maven
+
+```bash
+# Using Maven wrapper (recommended)
+./mvnw clean compile
+./mvnw clean package
+./mvnw spring-boot:run
+
+# Or if you have Maven installed globally
+mvn clean compile
+mvn clean package
+mvn spring-boot:run
+```
+
 ## Deployment
 
 ### Create Service Instance
@@ -15,8 +71,14 @@ cf create-service p.config-server standard kitchen-config-server \
 
 ### Build and Deploy Application
 
+**Using Gradle:**
 ```bash
 ./gradlew build && cf push -p build/libs/kitchen-0.0.1-SNAPSHOT.jar
+```
+
+**Using Maven:**
+```bash
+./mvnw clean package && cf push -p target/kitchen-0.0.1-SNAPSHOT.jar
 ```
 
 Visit your application route (e.g. `https://kitchen.<your-app-domain>`), and log in by providing a sample email address.
