@@ -6,29 +6,31 @@ the [documentation](https://techdocs.broadcom.com/tnz-app-services).)
 
 ## Building the Application
 
-This project supports both Gradle and Maven build systems.
+This project supports both Gradle and Maven build systems. It uses Spring Enterprise artifacts from Broadcom's repository, which requires authentication.
 
-### Gradle Build (Default)
+### Authentication Setup
 
-```bash
-./gradlew build
-./gradlew bootRun
-```
+Before building with either Gradle or Maven, you must configure your Spring Enterprise repository credentials.
 
-### Maven Build (Alternative)
+#### 1. Set Environment Variables (Recommended)
+Both Gradle and Maven can use these environment variables:
 
-This project uses Spring Enterprise artifacts from Broadcom's repository, which requires authentication.
-
-#### Authentication Setup
-
-**Option 1: Environment Variables**
 ```bash
 export SEC_ARTIFACTORY_USERNAME=your_username
 export SEC_ARTIFACTORY_PASSWORD=your_password
 ```
 
-**Option 2: Maven Settings**
-Add the following to your `~/.m2/settings.xml` file:
+#### 2. Build Tool Specific Configuration
+
+**For Gradle:**
+Gradle is automatically configured to use the environment variables above. Alternatively, you can add them to your `~/.gradle/gradle.properties` file:
+```properties
+secArtifactoryUsername=your_username
+secArtifactoryPassword=your_password
+```
+
+**For Maven:**
+Maven requires you to add the `spring-enterprise` server to your `~/.m2/settings.xml` file. The configuration below will read the environment variables you set in step 1:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -46,7 +48,14 @@ Add the following to your `~/.m2/settings.xml` file:
 </settings>
 ```
 
-#### Building with Maven
+### Gradle Build (Default)
+
+```bash
+./gradlew build
+./gradlew bootRun
+```
+
+### Maven Build (Alternative)
 
 ```bash
 # Using Maven wrapper (recommended)
