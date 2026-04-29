@@ -26,7 +26,7 @@
 			<dependency>
 				<groupId>com.vmware.tanzu.spring</groupId>
 				<artifactId>tanzu-spring-sdk-dependencies</artifactId>
-				<version>1.0.0-RC4</version>
+				<version>1.0.0</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
