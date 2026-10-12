@@ -8,16 +8,49 @@ the [documentation](https://techdocs.broadcom.com/tnz-app-services).)
 
 This project supports both Gradle and Maven build systems. It uses Spring Enterprise artifacts from Broadcom's repository, which requires authentication.
 
+### Dependencies
+
+Kitchen imports the Tanzu Spring SDK BOM
+(`com.vmware.tanzu.spring:tanzu-spring-sdk-dependencies`, version `1.2.0`) in both builds. The BOM manages the version of the
+Application Services starters, so the feature flag starter is declared without a version:
+
+```xml
+<!-- Maven -->
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>com.vmware.tanzu.spring</groupId>
+      <artifactId>tanzu-spring-sdk-dependencies</artifactId>
+      <version>1.2.0</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+</dependencyManagement>
+```
+
+```kotlin
+// Gradle
+dependencyManagement {
+    imports {
+        mavenBom("com.vmware.tanzu.spring:tanzu-spring-sdk-dependencies:1.2.0")
+    }
+}
+```
+
+To use a different SDK release, change the BOM version in `pom.xml` and `build.gradle.kts`. Both files must stay in sync.
+
 ### Authentication Setup
 
-Before building with either Gradle or Maven, you must configure your Spring Enterprise repository credentials.
+Your build must resolve artifacts from a repository that mirrors or proxies the Spring Enterprise Repository.
+See [Spring Enterprise Repository for Artifact Repository Administrators](https://techdocs.broadcom.com/us/en/vmware-tanzu/spring/tanzu-spring/commercial/spring-tanzu/guide-artifact-repository-administrators.html).
 
 #### 1. Set Environment Variables (Recommended)
 Both Gradle and Maven can use these environment variables:
 
 ```bash
 export SEC_ARTIFACTORY_USERNAME=your_username
-export SEC_ARTIFACTORY_PASSWORD=your_password
+export SEC_ARTIFACTORY_PASSWORD=your_access_token
 ```
 
 #### 2. Build Tool Specific Configuration
@@ -26,7 +59,7 @@ export SEC_ARTIFACTORY_PASSWORD=your_password
 Gradle is automatically configured to use the environment variables above. Alternatively, you can add them to your `~/.gradle/gradle.properties` file:
 ```properties
 secArtifactoryUsername=your_username
-secArtifactoryPassword=your_password
+secArtifactoryPassword=your_access_token
 ```
 
 **For Maven:**
